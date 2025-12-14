@@ -5,5 +5,5 @@ Skład zespołu:
 
 Filip Gołyski
 
-Kuba Godos
+Jakub Godos
 
