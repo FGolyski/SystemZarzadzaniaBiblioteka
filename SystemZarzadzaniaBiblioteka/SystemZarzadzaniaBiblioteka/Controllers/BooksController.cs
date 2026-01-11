@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SystemZarzadzaniaBiblioteka.Data;
 using SystemZarzadzaniaBiblioteka.Models;
+using Microsoft.AspNetCore.Authorization; 
 
 namespace SystemZarzadzaniaBiblioteka.Controllers
 {
+    [Authorize] 
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -26,7 +28,7 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Books/Details/5
+        // GET: Books/Details/5 
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,17 +47,18 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(book);
         }
 
-        // GET: Books/Create
+        // GET: Books/Create 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "FullName"); return View();
+            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "FullName");
+            return View();
         }
 
-        // POST: Books/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Books/Create 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Title,ReleaseYear,Description,AuthorId")] Book book)
         {
             if (ModelState.IsValid)
@@ -68,7 +71,8 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(book);
         }
 
-        // GET: Books/Edit/5
+        // GET: Books/Edit/5 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -85,11 +89,10 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(book);
         }
 
-        // POST: Books/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Books/Edit/5 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,ReleaseYear,Description,AuthorId")] Book book)
         {
             if (id != book.Id)
@@ -121,7 +124,8 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(book);
         }
 
-        // GET: Books/Delete/5
+        // GET: Books/Delete/5 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,9 +144,10 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(book);
         }
 
-        // POST: Books/Delete/5
+        // POST: Books/Delete/5 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var book = await _context.Books.FindAsync(id);
