@@ -1,0 +1,32 @@
+﻿@model IEnumerable<SystemZarzadzaniaBiblioteka.Models.Loan>
+@{
+    ViewData["Title"] = "Wypożyczenia";
+}
+
+<h2>@(User.IsInRole("Admin") ? "Wszystkie Wypożyczenia" : "Moje Książki")</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Książka</th>
+            <th>Data</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th>Użytkownik</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Book.Title</td>
+                <td>@item.LoanDate.ToShortDateString()</td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>@item.User.Email</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
