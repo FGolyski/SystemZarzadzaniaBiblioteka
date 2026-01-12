@@ -1,12 +1,16 @@
 ﻿@model IEnumerable<SystemZarzadzaniaBiblioteka.Models.Loan>
+
 @{
-    ViewData["Title"] = "Zwroty Użytkownika";
+    ViewData["Title"] = "Wypożyczenia Użytkownika";
 }
 
-<h2>Zarządzanie wypożyczeniami</h2>
-<a asp-action="Users" class="btn btn-secondary mb-3">Powrót do listy użytkowników</a>
+<h2>Wypożyczenia: <span class="text-primary">@ViewData["UserName"]</span></h2>
 
-<table class="table">
+<p>
+    <a asp-action="Users" class="btn btn-secondary">← Powrót do listy użytkowników</a>
+</p>
+
+<table class="table table-striped align-middle">
     <thead>
         <tr>
             <th>Książka</th>
@@ -16,25 +20,40 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @if (!Model.Any())
         {
             <tr>
-                <td>@item.Book.Title</td>
-                <td>@item.LoanDate.ToShortDateString()</td>
-                <td>@item.DueDate.ToShortDateString()</td>
-                <td>
-                    @if (item.ReturnDate == null)
-                    {
-                        <form asp-controller="Loans" asp-action="ReturnBook" asp-route-id="@item.Id" method="post">
-                            <button type="submit" class="btn btn-danger">Zatwierdź Zwrot</button>
-                        </form>
-                    }
-                    else
-                    {
-                        <span class="text-success">Zwrócono: @item.ReturnDate.Value.ToShortDateString()</span>
-                    }
-                </td>
+                <td colspan="4" class="text-center text-muted">Ten użytkownik nie ma żadnych wypożyczeń.</td>
             </tr>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Book.Title</td>
+                    <td>@item.LoanDate.ToShortDateString()</td>
+
+                    <td style="@(item.DueDate < DateTime.Now && item.ReturnDate == null ? "color:red; font-weight:bold;" : "")">
+                        @item.DueDate.ToShortDateString()
+                    </td>
+
+                    <td>
+                        @if (item.ReturnDate == null)
+                        {
+                            <form asp-controller="Loans" asp-action="ReturnBook" asp-route-id="@item.Id" method="post">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Czy na pewno chcesz zwrócić tę książkę za użytkownika?');">
+                                    Wymuś Zwrot
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-success fw-bold">Zwrócono: @item.ReturnDate.Value.ToShortDateString()</span>
+                        }
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

@@ -21,6 +21,14 @@
     </div>
 }
 
+<form asp-action="Index" method="get" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="searchString" class="form-control" placeholder="Szukaj po tytule lub autorze" value="@ViewData["CurrentFilter"]" />
+        <button type="submit" class="btn btn-primary">Szukaj</button>
+        <a asp-action="Index" class="btn btn-secondary">Wyczyść</a>
+    </div>
+</form>
+
 <p>
     @if (User.IsInRole("Admin"))
     {
@@ -31,9 +39,15 @@
 <table class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.Title)</th>
-            <th>@Html.DisplayNameFor(model => model.ReleaseYear)</th>
-            <th>Autor</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParm"]" asp-route-searchString="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.Title) ↕</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-searchString="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.ReleaseYear) ↕</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["AuthorSortParm"]" asp-route-searchString="@ViewData["CurrentFilter"]">Autor ↕</a>
+            </th>
             <th>Dostępność</th>
             <th>Akcje</th>
         </tr>

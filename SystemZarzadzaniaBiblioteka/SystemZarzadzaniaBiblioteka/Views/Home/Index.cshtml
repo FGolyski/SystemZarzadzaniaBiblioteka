@@ -1,8 +1,50 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Strona Główna";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center p-5 mb-4 bg-light rounded-3">
+    <h1 class="display-4 fw-bold">Witamy w Systemie Bibliotecznym</h1>
+    <p class="lead">Twoje centrum zarządzania książkami i wypożyczeniami.</p>
+
+    <hr class="my-4">
+
+    @if (User.Identity.IsAuthenticated)
+    {
+
+        <div class="mt-4">
+            <h3>Cześć, @User.Identity.Name!</h3>
+            <p>Biblioteka jest do Twojej dyspozycji.</p>
+
+            <a asp-controller="Books" asp-action="Index" class="btn btn-browse btn-lg px-5 py-3 fw-bold mt-3">
+                <i class="bi bi-book-fill"></i> PRZEGLĄDAJ I WYPOŻYCZ TERAZ
+            </a>
+
+            <div class="mt-3">
+                <a asp-controller="Loans" asp-action="Index" class="btn btn-my-loans">
+                    Moje aktywne wypożyczenia
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+    
+        <div class="mt-4">
+            <h4 class="text-danger mb-3">Dostęp ograniczony</h4>
+            <p class="mb-4">
+                Aby przeglądać katalog i wypożyczać książki, musisz posiadać aktywne konto.
+                <br />
+                Dołącz do nas już teraz!
+            </p>
+
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a class="btn btn-primary btn-lg px-4 gap-3" asp-area="Identity" asp-page="/Account/Login">
+                    Zaloguj się
+                </a>
+                <a class="btn btn-outline-secondary btn-lg px-4" asp-area="Identity" asp-page="/Account/Register">
+                    Zarejestruj się
+                </a>
+            </div>
+        </div>
+    }
 </div>

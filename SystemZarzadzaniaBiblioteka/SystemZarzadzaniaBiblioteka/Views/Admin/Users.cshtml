@@ -1,15 +1,16 @@
 ﻿@model IEnumerable<SystemZarzadzaniaBiblioteka.Models.ApplicationUser>
 @{
-    ViewData["Title"] = "Użytkownicy";
+    ViewData["Title"] = "Panel Użytkowników";
 }
 
-<h2>Wybierz użytkownika, aby zarządzać jego zwrotami</h2>
+<h1>Zarządzanie Użytkownikami</h1>
 
-<table class="table">
+<table class="table table-striped align-middle">
     <thead>
         <tr>
-            <th>Email</th>
-            <th>Akcja</th>
+            <th>Email / Login</th>
+            <th>ID Użytkownika</th>
+            <th>Akcje</th>
         </tr>
     </thead>
     <tbody>
@@ -17,8 +18,11 @@
         {
             <tr>
                 <td>@user.Email</td>
+                <td><small class="text-muted">@user.Id</small></td>
                 <td>
-                    <a asp-action="UserLoans" asp-route-userId="@user.Id" class="btn btn-info">Zobacz wypożyczenia</a>
+                    <a asp-controller="Admin" asp-action="UserLoans" asp-route-userId="@user.Id" class="btn btn-info btn-sm text-white">
+                        Zobacz wypożyczenia
+                    </a>
                 </td>
             </tr>
         }

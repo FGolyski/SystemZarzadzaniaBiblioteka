@@ -1,49 +1,81 @@
 ﻿@model SystemZarzadzaniaBiblioteka.Models.Book
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edytuj Książkę";
 }
 
-<h1>Edit</h1>
+<h1>Edytuj Książkę</h1>
 
-<h4>Book</h4>
+<h4>Zarządzanie danymi i stanem magazynowym</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+
+            <div class="card mb-4">
+                <div class="card-header text-white" style="background-color: #6d4c41;">
+                    Dane Bibliograficzne
+                </div>
+                <div class="card-body">
+                    <div class="form-group mb-3">
+                        <label asp-for="Title" class="control-label fw-bold"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="ReleaseYear" class="control-label fw-bold"></label>
+                        <input asp-for="ReleaseYear" class="form-control" />
+                        <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Description" class="control-label fw-bold"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="AuthorId" class="control-label fw-bold"></label>
+                        <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
+                        <span asp-validation-for="AuthorId" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ReleaseYear" class="control-label"></label>
-                <input asp-for="ReleaseYear" class="form-control" />
-                <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+
+            <div class="card mb-4" style="border-color: #ffb300;">
+                <div class="card-header" style="background-color: #ffb300; color: #3e2723; font-weight: bold;">
+                    Magazyn (Korekta Stanów)
+                </div>
+                <div class="card-body bg-light">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="TotalCopies" class="control-label fw-bold"></label>
+                                <input asp-for="TotalCopies" class="form-control" min="0" />
+                                <span asp-validation-for="TotalCopies" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="CopiesAvailable" class="control-label fw-bold"></label>
+                                <input asp-for="CopiesAvailable" class="form-control" min="0" />
+                                <span asp-validation-for="CopiesAvailable" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AuthorId" class="control-label"></label>
-                <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
-                <span asp-validation-for="AuthorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Zapisz Zmiany" class="btn btn-success px-4" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Anuluj</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

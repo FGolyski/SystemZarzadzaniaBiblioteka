@@ -1,38 +1,40 @@
 ﻿@model SystemZarzadzaniaBiblioteka.Models.Author
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Dodaj Autora";
 }
 
-<h1>Create</h1>
+<h1>Dodaj nowego autora</h1>
 
-<h4>Author</h4>
+<h4>Wprowadź dane autora</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
+
+            <div class="form-group mb-3">
+                <label asp-for="FirstName" class="control-label fw-bold"></label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
+
+            <div class="form-group mb-3">
+                <label asp-for="LastName" class="control-label fw-bold"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Dodaj autora" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Powrót do listy</a>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

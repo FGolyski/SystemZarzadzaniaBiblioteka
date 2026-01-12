@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace SystemZarzadzaniaBiblioteka.Controllers
 {
-    [Authorize] 
+    [Authorize]
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,7 +21,6 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             _context = context;
         }
 
-        // GET: Books
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["TitleSortParm"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
@@ -64,7 +63,6 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(await books.AsNoTracking().ToListAsync());
         }
 
-        // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -77,7 +75,6 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(book);
         }
 
-        // GET: Books/Create
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
@@ -85,11 +82,9 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View();
         }
 
-        // POST: Books/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-
         public async Task<IActionResult> Create([Bind("Id,Title,ReleaseYear,Description,AuthorId,TotalCopies")] Book book)
         {
             if (ModelState.IsValid)
@@ -104,7 +99,6 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(book);
         }
 
-        // GET: Books/Edit/5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -113,11 +107,10 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             var book = await _context.Books.FindAsync(id);
             if (book == null) return NotFound();
 
-            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "FullName", book.AuthorId); // Poprawione na FullName
+            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "FullName", book.AuthorId);
             return View(book);
         }
 
-        // POST: Books/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
@@ -143,7 +136,6 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(book);
         }
 
-        // GET: Books/Delete/5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -157,7 +149,6 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             return View(book);
         }
 
-        // POST: Books/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]

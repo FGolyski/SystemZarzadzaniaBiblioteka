@@ -19,17 +19,32 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             _userManager = userManager;
         }
 
-        // GET: Loans
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
+            ViewData["CurrentFilter"] = searchString;
             var user = await _userManager.GetUserAsync(User);
+
+            var loans = _context.Loans
+                .Include(l => l.Book)
+                .Include(l => l.User)
+                .AsQueryable();
+
             if (User.IsInRole("Admin"))
             {
-                return View(await _context.Loans.Include(l => l.Book).Include(l => l.User).ToListAsync());
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    loans = loans.Where(l => l.Book.Title.Contains(searchString)
+                                           || l.User.Email.Contains(searchString));
+                }
+
+                return View(await loans.OrderByDescending(l => l.LoanDate).ToListAsync());
             }
             else
             {
-                return View(await _context.Loans.Include(l => l.Book).Where(l => l.UserId == user.Id).ToListAsync());
+                return View(await loans
+                    .Where(l => l.UserId == user.Id)
+                    .OrderByDescending(l => l.LoanDate)
+                    .ToListAsync());
             }
         }
 
@@ -71,7 +86,7 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
             };
 
             _context.Add(loan);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
 
             TempData["Success"] = "Pomyślnie wypożyczono książkę!";
             return RedirectToAction(nameof(Index));
@@ -92,7 +107,7 @@ namespace SystemZarzadzaniaBiblioteka.Controllers
 
             if (loan.IsExtended)
             {
-                return RedirectToAction(nameof(Index)); 
+                return RedirectToAction(nameof(Index));
             }
 
             loan.DueDate = loan.DueDate.AddDays(7);
