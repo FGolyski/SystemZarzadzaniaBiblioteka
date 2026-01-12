@@ -24,7 +24,16 @@ namespace SystemZarzadzaniaBiblioteka.Models
         public int AuthorId { get; set; }
 
         [ForeignKey("AuthorId")]
+        [Display(Name = "Autor")]
         public virtual Author? Author { get; set; }
+
+        [Display(Name = "Całkowity nakład")]
+        [Required(ErrorMessage = "Musisz podać ilość zakupionych książek")]
+        [Range(1, 1000, ErrorMessage = "Nakład musi wynosić min. 1 sztukę")]
+        public int TotalCopies { get; set; }
+
+        [Display(Name = "Dostępne sztuki")]
+        public int CopiesAvailable { get; set; } 
 
         public virtual ICollection<Loan>? Loans { get; set; }
     }

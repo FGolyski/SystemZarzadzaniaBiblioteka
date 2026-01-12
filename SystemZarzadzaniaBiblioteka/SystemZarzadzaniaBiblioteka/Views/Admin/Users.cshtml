@@ -1,0 +1,26 @@
+﻿@model IEnumerable<SystemZarzadzaniaBiblioteka.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Użytkownicy";
+}
+
+<h2>Wybierz użytkownika, aby zarządzać jego zwrotami</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Akcja</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>
+                    <a asp-action="UserLoans" asp-route-userId="@user.Id" class="btn btn-info">Zobacz wypożyczenia</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

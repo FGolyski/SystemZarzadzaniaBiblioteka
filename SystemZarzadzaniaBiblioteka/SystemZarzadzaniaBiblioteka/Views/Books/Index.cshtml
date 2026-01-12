@@ -1,32 +1,40 @@
 ﻿@model IEnumerable<SystemZarzadzaniaBiblioteka.Models.Book>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Katalog Książek";
 }
 
 <h1>Katalog Książek</h1>
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <p>
     @if (User.IsInRole("Admin"))
     {
-        <a asp-action="Create">Create New</a>
+        <a asp-action="Create" class="btn btn-primary">Dodaj nową książkę</a>
     }
 </p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseYear)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Author)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.ReleaseYear)</th>
+            <th>Autor</th>
+            <th>Dostępność</th>
             <th>Akcje</th>
         </tr>
     </thead>
@@ -34,32 +42,45 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.ReleaseYear)</td>
+                <td>@Html.DisplayFor(modelItem => item.Author.FullName)</td>
+
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    @if (item.CopiesAvailable > 0)
+                    {
+                        <span class="badge bg-success" style="font-size: 0.9em;">
+                            Dostępne: @item.CopiesAvailable / @item.TotalCopies
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger" style="font-size: 0.9em;">
+                            Brak (0 / @item.TotalCopies)
+                        </span>
+                    }
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ReleaseYear)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Author.FirstName)
-                </td>
+
                 <td>
                     @if (User.IsInRole("Admin"))
                     {
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> <span>|</span>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> <span>|</span>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edytuj</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Usuń</a>
                     }
 
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Info</a>
 
-                    <form asp-controller="Loans" asp-action="Create" method="post" style="display:inline; margin-left: 10px;">
-                        <input type="hidden" name="bookId" value="@item.Id" />
-                        <button type="submit" class="btn btn-sm btn-success">Wypożycz</button>
-                    </form>
-
+                    @if (item.CopiesAvailable > 0)
+                    {
+                        <form asp-controller="Loans" asp-action="Create" method="post" style="display:inline;">
+                            <input type="hidden" name="bookId" value="@item.Id" />
+                            <button type="submit" class="btn btn-sm btn-success">Wypożycz</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button disabled class="btn btn-sm btn-secondary">Brak na stanie</button>
+                    }
                 </td>
             </tr>
         }

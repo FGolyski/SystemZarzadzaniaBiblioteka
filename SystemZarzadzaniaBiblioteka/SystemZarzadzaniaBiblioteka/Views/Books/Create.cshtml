@@ -1,47 +1,61 @@
 ﻿@model SystemZarzadzaniaBiblioteka.Models.Book
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Dodaj Książkę";
 }
 
-<h1>Create</h1>
+<h1>Dodaj nową książkę</h1>
 
-<h4>Book</h4>
+<h4>Wypełnij dane książki</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="Title" class="control-label"></label>
                 <input asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="ReleaseYear" class="control-label"></label>
                 <input asp-for="ReleaseYear" class="form-control" />
                 <span asp-validation-for="ReleaseYear" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            <div class="form-group mb-3">
                 <label asp-for="AuthorId" class="control-label"></label>
-                <select asp-for="AuthorId" class ="form-control" asp-items="ViewBag.AuthorId"></select>
+                <select asp-for="AuthorId" class="form-control" asp-items="ViewBag.AuthorId"></select>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="form-group mb-3 p-3 bg-light border rounded">
+                <label asp-for="TotalCopies" class="control-label fw-bold"></label>
+                <input asp-for="TotalCopies" class="form-control" value="1" min="1" />
+                <small class="text-muted">Ile egzemplarzy kupiła biblioteka?</small>
+                <span asp-validation-for="TotalCopies" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Dodaj książkę" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="mt-3">
+    <a asp-action="Index">Powrót do listy</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

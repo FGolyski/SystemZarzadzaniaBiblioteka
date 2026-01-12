@@ -9,8 +9,9 @@
     <thead>
         <tr>
             <th>Książka</th>
-            <th>Data</th>
-            @if (User.IsInRole("Admin"))
+            <th>Data Wypożyczenia</th>
+            <th>Termin Zwrotu</th>
+            <th>Status / Akcje</th> @if (User.IsInRole("Admin"))
             {
                 <th>Użytkownik</th>
             }
@@ -22,6 +23,24 @@
             <tr>
                 <td>@item.Book.Title</td>
                 <td>@item.LoanDate.ToShortDateString()</td>
+
+                <td style="@(item.DueDate < DateTime.Now && item.ReturnDate == null ? "color:red; font-weight:bold;" : "")">
+                    @item.DueDate.ToShortDateString()
+                </td>
+
+                <td>
+                    @if (item.ReturnDate == null)
+                    {
+                        <form asp-action="Extend" asp-route-id="@item.Id" method="post">
+                            <button type="submit" class="btn btn-warning btn-sm">Przedłuż (+7 dni)</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="text-success">Oddano: @item.ReturnDate.Value.ToShortDateString()</span>
+                    }
+                </td>
+
                 @if (User.IsInRole("Admin"))
                 {
                     <td>@item.User.Email</td>

@@ -11,8 +11,14 @@ namespace SystemZarzadzaniaBiblioteka.Models
         public DateTime LoanDate { get; set; } = DateTime.Now;
 
         [Display(Name = "Data zwrotu")]
-        public DateTime? ReturnDate { get; set; } 
+        public DateTime? ReturnDate { get; set; }
 
+        [Display(Name = "Termin zwrotu")]
+        public DateTime DueDate { get; set; }
+
+        [Display(Name = "Czy przedłużono?")]
+        public bool IsExtended { get; set; } = false;
+        // --------------------------------
 
         public int BookId { get; set; }
         public virtual Book? Book { get; set; }
